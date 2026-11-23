@@ -150,6 +150,9 @@ function rchApplySignature(event) {
 function onNewMessageComposeHandler(event) { rchApplySignature(event); }
 function onMessageFromChangedHandler(event) { rchApplySignature(event); }
 
+// Tell Office the add-on has loaded (needed in Outlook on the web and the phone app).
+if (typeof Office !== "undefined" && typeof Office.onReady === "function") { Office.onReady(); }
+
 // Connect the functions to the events named in the manifest.
 if (typeof Office !== "undefined" && Office.actions && typeof Office.actions.associate === "function") {
   Office.actions.associate("onNewMessageComposeHandler", onNewMessageComposeHandler);
