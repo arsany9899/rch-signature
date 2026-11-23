@@ -40,19 +40,6 @@ var COMPANY = {
 
 /* ===================== (no need to edit below) ===================== */
 
-// ---- temporary diagnostics (shows a small bar on the email) ----
-var RCH_DEBUG = true;
-function rchNotify(msg) {
-  try {
-    if (!RCH_DEBUG) return;
-    var it = Office.context.mailbox.item;
-    if (it && it.notificationMessages) {
-      it.notificationMessages.replaceAsync("rchdbg", { type: Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage, message: String(msg).slice(0, 150), icon: "Icon.16x16", persistent: false });
-    }
-  } catch (e) {}
-}
-
-
 function rchEscape(s) {
   return String(s == null ? "" : s)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -126,16 +113,13 @@ function rchGetSender(item, callback) {
 }
 
 function rchApplySignature(event) {
-  var item, done = function () { try { event.completed(); } catch (e) {} };
-  try { item = Office.context.mailbox.item; rchNotify("RCH: started"); } catch (e) { done(); return; }
-  try {
+  var item = Office.context.mailbox.item;
+  var done = function () { try { event.completed(); } catch (e) {} };
   rchGetSender(item, function (sender) {
-    rchNotify("RCH: sender " + sender.email);
     // Only add the signature for company addresses.
     if (!sender.email || String(sender.email).toLowerCase().indexOf("@" + COMPANY.domain) === -1) { done(); return; }
     var html = rchBuildSignature(rchFindPerson(sender.email, sender.name), new Date());
-    item.body.setSignatureAsync(html, { coercionType: Office.CoercionType.Html }, function (r) {
-      rchNotify("RCH: setSignature " + r.status + (r.error ? " " + r.error.message : ""));
+    item.body.setSignatureAsync(html, { coercionType: Office.CoercionType.Html }, function () {
       // Stop Outlook also adding the person's own saved signature (prevents doubles).
       if (typeof item.disableClientSignatureAsync === "function") {
         item.disableClientSignatureAsync(function () { done(); });
@@ -144,7 +128,6 @@ function rchApplySignature(event) {
       }
     });
   });
-  } catch (e) { rchNotify("RCH error: " + e.message); done(); }
 }
 
 function onNewMessageComposeHandler(event) { rchApplySignature(event); }
