@@ -67,7 +67,11 @@ function rchBuildSignature(person, date) {
   var logo = xmas ? COMPANY.christmasLogo : COMPANY.logo;
   var logoW = xmas ? COMPANY.christmasLogoWidth : COMPANY.logoWidth;
   var email = rchEscape(String(person.email || "").toLowerCase());
-  var pill = "display:inline-block;border:1px solid #2B4A6F;border-radius:4px;padding:4px 10px;margin:0 4px 4px 0;color:#2B4A6F;font-family:Segoe UI,Arial,sans-serif;font-size:9pt;font-weight:600;text-decoration:none;";
+  // Outline buttons are built as table cells (Outlook copies borders on links onto extra boxes).
+  var cell = "border:1px solid #2B4A6F;border-radius:4px;padding:4px 10px;";
+  var link = "color:#2B4A6F;font-family:Segoe UI,Arial,sans-serif;font-size:9pt;font-weight:600;text-decoration:none;";
+  var gap = '<td style="width:6px;font-size:1px;line-height:1px;">&nbsp;</td>';
+  function btn(url, label) { return '<td style="' + cell + '"><a href="' + url + '" style="' + link + '">' + label + "</a></td>"; }
 
   var top = "Kind regards,<br><br>";
   if (person.name) top += '<b style="font-size:12pt;">' + rchEscape(person.name) + "</b>";
@@ -86,10 +90,9 @@ function rchBuildSignature(person, date) {
     '<a href="https://maps.google.com/?q=224A%20Broadway%2C%20Reservoir%20VIC%203073" style="color:#555555;text-decoration:none;"><b style="color:#2B4A6F;">Reservoir</b> <span style="color:#555555;">224A Broadway</span></a>' +
     '<table cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;"><tr><td style="background:#F5A623;border-radius:4px;padding:5px 12px;">' +
     '<a href="' + COMPANY.booking + '" style="color:#ffffff;font-family:Segoe UI,Arial,sans-serif;font-size:9pt;font-weight:bold;text-decoration:none;">Book an appointment</a></td></tr></table>' +
-    '<div style="margin-top:6px;">' +
-    '<a href="' + COMPANY.website + '" style="' + pill + '">Website</a>' +
-    '<a href="' + COMPANY.instagram + '" style="' + pill + '">Instagram</a>' +
-    '<a href="' + COMPANY.facebook + '" style="' + pill + '">Facebook</a></div></td></tr>' +
+    '<table cellpadding="0" cellspacing="0" border="0" style="margin-top:6px;"><tr>' +
+    btn(COMPANY.website, "Website") + gap + btn(COMPANY.instagram, "Instagram") + gap + btn(COMPANY.facebook, "Facebook") +
+    "</tr></table></td></tr>" +
     '<tr><td style="padding-top:10px;font-size:7.5pt;color:#888888;line-height:1.35;"><i>This e-mail message and accompanying data may contain information that is confidential and subject to privilege. If you are not the intended recipient, you are notified that any use, dissemination, distribution or copying of this message or data is prohibited. If you have received this e-mail in error please notify us immediately and delete all material pertaining to this e-mail.</i></td></tr></table>';
 }
 
