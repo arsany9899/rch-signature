@@ -15,6 +15,7 @@ var STAFF = [
   { email: "stephanie@radiantcarehealth.com.au", name: "Stephanie Kilta", title: "Principal Physiotherapist",  mobile: "0422 538 055" },
   { email: "mau@radiantcarehealth.com.au",       name: "Mau Imo",         title: "Physiotherapist",            mobile: "0481 579 248" },
   { email: "saba@radiantcarehealth.com.au",      name: "Saba Shafiq",     title: "Physiotherapist",            mobile: "0424 393 220" },
+  { email: "mahia@radiantcarehealth.com.au",     name: "Mahia Mahia",     title: "Physiotherapist",            mobile: "" },
   { email: "admin@radiantcarehealth.com.au",     name: "",                title: "Admin Team",                 mobile: "" }
 ];
 
